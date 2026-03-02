@@ -1,0 +1,158 @@
+{
+  "kind": "spec_vs_diff_report",
+  "version": "1.0",
+  "generatedAt": "2026-03-02T05:54:42.356Z",
+  "summary": "The diff implements a substantial portion of the build request — backend Motoko actor, frontend screens, animations, RPG styling, and asset integration. However, several specific requirements have gaps or are only partially fulfilled based on the visible diff evidence.",
+  "missing_requirements": [
+    {
+      "requirement": "Lesson content includes drag-and-drop question type as one of the interactive question types",
+      "reason": "The diff shows only 'multiple-choice' and 'fill-blank' question types in gameData.ts and LessonPage references. Drag-and-drop is listed as a required question type in REQ-2 but is not present in any visible file.",
+      "evidence": [
+        "frontend/src/lib/gameData.ts"
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "requirement": "Boss lessons must award 3x the base XP flagged with isBoss: true",
+      "reason": "The Lesson type has isBossBattle field, but the backend/main.mo is truncated and no evidence of boss lessons being seeded with 3x XP is visible in the diff.",
+      "evidence": [
+        "backend/main.mo"
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "requirement": "Skill tree for Math has at least 15 nodes and English has at least 15 nodes seeded in backend",
+      "reason": "The backend/main.mo is truncated and no skill tree seeding data with 15+ nodes per subject is visible in the diff.",
+      "evidence": [
+        "backend/main.mo"
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "requirement": "claimStreakReward can only be called once per milestone",
+      "reason": "Backend implementation is truncated and milestone claim deduplication logic is not visible in the diff.",
+      "evidence": [
+        "backend/main.mo"
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "requirement": "Session includes 10 randomly selected questions from the chosen subject for multiplayer",
+      "reason": "The backend is truncated and no multiplayer session question-selection logic is visible in the diff.",
+      "evidence": [
+        "backend/main.mo"
+      ]
+    },
+    {
+      "id": "REQ-8",
+      "requirement": "Leaderboard shows top 10 users by XP with rank badges",
+      "reason": "LeaderboardPage.tsx is listed as a route in App.tsx but its implementation is not present in the visible diff due to file limits. Cannot confirm rank badges and top-10 XP display.",
+      "evidence": [
+        "frontend/src/App.tsx"
+      ]
+    },
+    {
+      "id": "REQ-9",
+      "requirement": "Purchased avatar costumes appear in the Profile screen avatar customization panel",
+      "reason": "ShopPage and ProfilePage are referenced in App.tsx but their implementations are omitted from the visible diff. Cannot confirm avatar customization panel integration.",
+      "evidence": [
+        "frontend/src/App.tsx"
+      ]
+    },
+    {
+      "id": "REQ-10",
+      "requirement": "World Map renders with layered parallax-style illustration zones and the world map background asset as the background",
+      "reason": "WorldMapPage.tsx is listed in routing but its implementation is not present in the visible diff. Cannot confirm parallax layering or background asset usage.",
+      "evidence": [
+        "frontend/src/App.tsx"
+      ]
+    },
+    {
+      "id": "REQ-11",
+      "requirement": "All 9 required image assets served from frontend/public/assets/generated including world-map-bg, 4 avatars, icon-coin, icon-gem, icon-streak, boss-banner",
+      "reason": "icon-streak.dim_64x64.png and world-map-bg.dim_1200x800.png are not referenced in any visible file, and no evidence of the actual generated asset files being added is present in the diff.",
+      "evidence": [
+        "frontend/src/components/animations/CoinGemAnimation.tsx",
+        "frontend/src/components/CoinGemHeader.tsx"
+      ]
+    },
+    {
+      "id": "REQ-8",
+      "requirement": "Daily Quests panel shows progress bars for each active quest with actual incremental progress",
+      "reason": "DailyQuestsPage.tsx explicitly comments the progress bar is 'visual only, always 0 or 100', meaning true incremental quest progress tracking is not implemented.",
+      "evidence": [
+        "frontend/src/pages/DailyQuestsPage.tsx"
+      ]
+    }
+  ],
+  "hallucinated_features": [
+    {
+      "description": "LoginPage screen and /login route added as a separate authentication screen",
+      "reason": "The build request does not specify a dedicated login page or route beyond Internet Identity authentication with onboarding. A separate LoginPage component and route is implemented beyond what was requested.",
+      "evidence": [
+        "frontend/src/App.tsx"
+      ]
+    },
+    {
+      "description": "MixinAuthorization and AccessControl modules included in the backend actor",
+      "reason": "The build request specifies a single Motoko actor with no mention of authorization mixins or access control modules. These appear to be scaffolding additions beyond the requirements.",
+      "evidence": [
+        "backend/main.mo"
+      ]
+    },
+    {
+      "description": "MixinStorage and blob storage included in the backend actor",
+      "reason": "The build request specifies all state in stable Motoko variables with no external databases. Blob storage mixin was not requested.",
+      "evidence": [
+        "backend/main.mo"
+      ]
+    },
+    {
+      "description": "UserProfile type and getCallerUserProfile/saveCallerUserProfile caller-based functions added to backend",
+      "reason": "REQ-1 does not specify a UserProfile entity separate from User, nor caller-principal-based profile functions. These appear to be additional scaffolding not in the requirements.",
+      "evidence": [
+        "frontend/src/hooks/useQueries.ts"
+      ]
+    }
+  ],
+  "confidence": 0.52,
+  "changed_files": [
+    "all_files_summary.json",
+    "backend/main.mo",
+    "frontend-file-summaries.txt",
+    "frontend/index.css",
+    "frontend/index.html",
+    "frontend/src/App.tsx",
+    "frontend/src/components/BottomNavigation.tsx",
+    "frontend/src/components/CoinGemHeader.tsx",
+    "frontend/src/components/Layout.tsx",
+    "frontend/src/components/RPGButton.tsx",
+    "frontend/src/components/animations/BossEntranceAnimation.tsx",
+    "frontend/src/components/animations/CoinGemAnimation.tsx",
+    "frontend/src/components/animations/LevelUpAnimation.tsx",
+    "frontend/src/components/animations/XPGainAnimation.tsx",
+    "frontend/src/hooks/useActor.ts",
+    "frontend/src/hooks/useInternetIdentity.ts",
+    "frontend/src/hooks/useQueries.ts",
+    "frontend/src/index.css",
+    "frontend/src/lib/gameData.ts",
+    "frontend/src/lib/userStore.ts",
+    "frontend/src/lib/utils.ts",
+    "frontend/src/main.tsx",
+    "frontend/src/pages/AITutorPage.tsx",
+    "frontend/src/pages/DailyQuestsPage.tsx",
+    "frontend/src/pages/LeaderboardPage.tsx",
+    "frontend/src/pages/LessonPage.tsx",
+    "frontend/src/pages/LoginPage.tsx",
+    "frontend/src/pages/MultiplayerPage.tsx",
+    "frontend/src/pages/OnboardingPage.tsx",
+    "frontend/src/pages/ProfilePage.tsx",
+    "frontend/src/pages/ShopPage.tsx",
+    "frontend/src/pages/SkillTreePage.tsx",
+    "frontend/src/pages/StreakTrackerPage.tsx",
+    "frontend/src/pages/WorldMapPage.tsx",
+    "frontend/src/utils/urlParams.ts",
+    "frontend/tailwind.config.js",
+    "project_state.json"
+  ]
+}

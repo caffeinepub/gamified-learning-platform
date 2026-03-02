@@ -1,0 +1,249 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "EduQuest Academy - Gamified Math & English Learning Platform (RPG-style)",
+  "requirements": [
+    {
+      "id": "REQ-8",
+      "summary": "Build the full frontend application with 10 core screens: Onboarding, World Map, Lesson, Skill Tree, Daily Quests, Streak Tracker, Multiplayer, AI Tutor, Profile, and Leaderboard",
+      "acceptanceCriteria": [
+        "All 10 screens are navigable from a persistent bottom navigation bar",
+        "World Map renders each world as a visual node; locked worlds are greyed out",
+        "Lesson screen presents questions one at a time with immediate feedback (correct = green flash + XP pop-up, wrong = red shake + hint)",
+        "Skill Tree renders nodes as a connected graph with prerequisite lines",
+        "Daily Quests panel shows progress bars for each active quest",
+        "Streak tracker shows a fire icon with day count and milestone markers",
+        "Multiplayer lobby shows available challenges and a 'Create Challenge' button",
+        "Profile screen shows animated XP progress bar and coin/gem balances",
+        "Leaderboard shows top 10 users by XP with rank badges"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/OnboardingPage.tsx",
+          "operation": "create",
+          "description": "Create the Onboarding screen with character selection (4 avatar options: wizard, knight, scientist, archer) and age-group selection. Use the authorization component to ensure users are authenticated before showing onboarding. After the user selects their avatar and enters their username/age, call createUser() and saveCallerUserProfile(). Display avatar images from frontend/public/assets/generated/avatar-wizard.dim_256x256.png, avatar-knight.dim_256x256.png, avatar-scientist.dim_256x256.png, and avatar-archer.dim_256x256.png. Verify the authorization component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/WorldMapPage.tsx",
+          "operation": "create",
+          "description": "Create the World Map screen showing all 12 worlds (6 Math, 6 English) as interactive nodes on an adventure map. Use listWorlds() to fetch world data. Display locked/unlocked/boss states with visual indicators. Use the generated background image frontend/public/assets/generated/world-map-bg.dim_1200x800.png as the background. Each world node should be clickable and navigate to the lessons for that world."
+        },
+        {
+          "path": "frontend/src/pages/LessonPage.tsx",
+          "operation": "create",
+          "description": "Create the Lesson screen with interactive question types (multiple choice, fill-in-the-blank). Use getLessonsByWorld(worldId) to fetch lessons. Present questions one at a time with immediate feedback: correct answers trigger a green flash and XP pop-up animation, wrong answers trigger a red shake and display a hint. Call recordLessonResult(userId, lessonId, score) after completion. Display the boss-banner.dim_800x300.png image when entering a boss battle lesson."
+        },
+        {
+          "path": "frontend/src/pages/SkillTreePage.tsx",
+          "operation": "create",
+          "description": "Create the Skill Tree screen with a visual node graph for Math and English. Use getSkillTree(subject) and getUserSkillNodes(userId) to fetch skill tree data. Render nodes as a connected graph with prerequisite lines. Allow users to click unlockable nodes to call unlockSkillNode(userId, nodeId). Show locked, unlocked, and available-to-unlock states with distinct visual styles."
+        },
+        {
+          "path": "frontend/src/pages/DailyQuestsPage.tsx",
+          "operation": "create",
+          "description": "Create the Daily Quests panel showing 3 daily quests per day. Use getDailyQuests(userId) to fetch quests. Display progress bars for each active quest with quest title, description, and rewards (XP/coins). Include a button to complete quests that calls completeQuest(userId, questId). Show quest expiration countdown timer."
+        },
+        {
+          "path": "frontend/src/pages/StreakTrackerPage.tsx",
+          "operation": "create",
+          "description": "Create the Streak tracker screen showing a fire icon with day count and milestone markers at days 3, 7, 14, and 30. Use getStreakStatus(userId) to fetch streak data. Display the icon-streak.dim_64x64.png image. Show milestone rewards and allow users to claim rewards with claimStreakReward(userId). Call recordLogin(userId) when the user visits this screen to maintain their streak."
+        },
+        {
+          "path": "frontend/src/pages/MultiplayerPage.tsx",
+          "operation": "create",
+          "description": "Create the Multiplayer lobby and battle screen. Display available challenges and a 'Create Challenge' button that calls createChallenge(hostId, subject). Use getMultiplayerSession(sessionId) to fetch session data. Allow users to join challenges with joinChallenge(sessionId, opponentId), submit answers with submitAnswers(sessionId, userId, answers), and resolve sessions with resolveSession(sessionId). Display a timed quiz interface (10 questions, 90 seconds)."
+        },
+        {
+          "path": "frontend/src/pages/AITutorPage.tsx",
+          "operation": "create",
+          "description": "Create the AI Tutor chat/recommendation panel. Use getTutorRecommendation(userId, subject) to fetch personalized recommendations based on user performance. Display motivational messages and recommended lessons. Show hints for struggling topics. Present the tutor as a friendly character that adapts to the user's learning level."
+        },
+        {
+          "path": "frontend/src/pages/ProfilePage.tsx",
+          "operation": "create",
+          "description": "Create the Profile screen showing XP bar with animated progress, level, coins, gems, avatar, and achievements. Use getUser(id) and getCallerUserProfile() to fetch user data. Display the selected avatar image from frontend/public/assets/generated/avatar-*.dim_256x256.png. Show coin and gem balances with icons from icon-coin.dim_64x64.png and icon-gem.dim_64x64.png. Include avatar customization panel showing purchased costumes from getUserPurchases(userId)."
+        },
+        {
+          "path": "frontend/src/pages/LeaderboardPage.tsx",
+          "operation": "create",
+          "description": "Create the Leaderboard screen showing top 10 users by XP with rank badges. Fetch user data and sort by XP. Display usernames, avatars, levels, and total XP. Highlight the current user's position if they are in the top 10."
+        },
+        {
+          "path": "frontend/src/components/BottomNavigation.tsx",
+          "operation": "create",
+          "description": "Create a persistent bottom navigation bar component that appears on all screens. Include navigation links to World Map, Skill Tree, Daily Quests, Streak Tracker, Multiplayer, AI Tutor, Profile, and Leaderboard. Use React Router's NavLink for active state styling. Apply RPG-themed icon styling consistent with the adventure theme."
+        },
+        {
+          "path": "frontend/src/components/Layout.tsx",
+          "operation": "create",
+          "description": "Create a Layout component that wraps all pages and includes the persistent header (showing coin/gem balances) and BottomNavigation component. Use getUser(id) to fetch and display current user's coin and gem balances in the header. Display icon-coin.dim_64x64.png and icon-gem.dim_64x64.png in the header."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Wire all created pages into the React Router configuration. Add routes for /onboarding, /world-map, /lesson/:worldId, /skill-tree, /daily-quests, /streak, /multiplayer, /ai-tutor, /profile, /leaderboard, and /shop. Wrap routes with the Layout component. Add authentication guard that redirects unauthenticated users to login. Add onboarding guard that redirects users without a profile to /onboarding. Verify the authorization component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/hooks/useGameData.ts",
+          "operation": "create",
+          "description": "Create custom React Query hooks for all game data fetching: useUser(userId), useWorlds(), useLessons(worldId), useSkillTree(subject), useUserSkillNodes(userId), useDailyQuests(userId), useStreakStatus(userId), useMultiplayerSession(sessionId), useTutorRecommendation(userId, subject), useUserPurchases(userId). Each hook should use React Query to cache and manage data fetching from the backend actor."
+        },
+        {
+          "path": "frontend/src/hooks/useGameMutations.ts",
+          "operation": "create",
+          "description": "Create custom React Query mutation hooks for all game actions: useCreateUser(), useRecordLogin(), useCompleteQuest(), useClaimStreakReward(), useRecordLessonResult(), useUnlockSkillNode(), useCreateChallenge(), useJoinChallenge(), useSubmitAnswers(), useResolveSession(), usePurchaseItem(). Each hook should use React Query mutations with optimistic updates and proper error handling."
+        },
+        {
+          "path": "frontend/src/hooks/useProfileSetup.ts",
+          "operation": "create",
+          "description": "Create a hook to manage the profile setup flow for new users. Check if the user has a profile with getCallerUserProfile(). If null, show the onboarding screen. Prevent modal flash by properly managing loading states as described in the authorization component usage. Return showProfileSetup flag and profile data. Verify the authorization component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-9",
+      "summary": "Implement the Game Economy UI with persistent coin/gem display and Shop screen for purchasing hint packs, avatar costumes, and world skins",
+      "acceptanceCriteria": [
+        "Coin and gem balances are shown in a persistent header on every screen",
+        "Shop screen lists available items with their costs",
+        "Purchasing an item deducts the correct balance and marks the item as owned",
+        "Insufficient balance shows a clear error message",
+        "Purchased avatar costumes appear in the Profile screen's avatar customization panel"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/ShopPage.tsx",
+          "operation": "create",
+          "description": "Create the Shop screen where users can spend coins to unlock hint packs (50 coins each) and spend gems to unlock premium avatar costumes (20 gems each) or world skin themes (30 gems each). Display item cards with preview images, names, costs, and purchase buttons. Use getUserPurchases(userId) to check owned items and disable/mark them. Call purchaseItem(userId, itemType, itemId) to process purchases. Show clear error messages for insufficient balance. Display coin and gem icons from icon-coin.dim_64x64.png and icon-gem.dim_64x64.png next to prices."
+        },
+        {
+          "path": "frontend/src/components/CoinGemHeader.tsx",
+          "operation": "create",
+          "description": "Create a header component that displays the user's current coin and gem balances persistently across all screens. Use getUser(id) to fetch balances and React Query to keep them updated. Display icon-coin.dim_64x64.png and icon-gem.dim_64x64.png icons next to the numeric values. Style with gold borders and glowing accents consistent with the RPG theme. This component should be included in the Layout component."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Add route for /shop in the React Router configuration. Ensure the Shop page is accessible from the bottom navigation and that the CoinGemHeader is visible on all authenticated pages through the Layout component."
+        },
+        {
+          "path": "frontend/src/components/BottomNavigation.tsx",
+          "operation": "modify",
+          "description": "Add a Shop navigation link to the bottom navigation bar with an appropriate icon (e.g., shopping cart or treasure chest). Ensure it navigates to /shop."
+        }
+      ]
+    },
+    {
+      "id": "REQ-10",
+      "summary": "Apply a vibrant RPG adventure visual theme with jewel-toned colors, adventure-style fonts, parallax backgrounds, 3D button effects, and particle animations",
+      "acceptanceCriteria": [
+        "Color palette consistently uses the defined jewel tones across all screens",
+        "Headings use a bold rounded font; body text uses a clean sans-serif",
+        "XP gain triggers an animated floating '+XP' text and particle burst",
+        "Level-up triggers a full-screen celebration animation",
+        "Coin and gem pickups animate with a bounce and sparkle effect",
+        "Boss battle lesson has a distinct dramatic entrance animation",
+        "All interactive buttons have hover/press state with a 3D-press effect"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/index.css",
+          "operation": "modify",
+          "description": "Update global styles to use the jewel-toned color palette (deep emerald green #047857, royal gold #fbbf24, crimson red #dc2626, midnight navy #1e3a8a) with glowing accents. Import and apply a bold rounded adventure-style font for headings (e.g., from Google Fonts) and a clean sans-serif for body text. Define CSS custom properties for the color palette and font families. Add base button styles with 3D-pressed affordances and gold borders."
+        },
+        {
+          "path": "frontend/tailwind.config.js",
+          "operation": "modify",
+          "description": "Extend Tailwind theme with custom jewel-toned colors (emerald-rpg, gold-rpg, crimson-rpg, navy-rpg) and custom font families (heading-rpg, body-rpg). Add custom animation utilities for XP gain, level-up, coin drops, and quest completions. Configure drop-shadow and glow effects for particle animations."
+        },
+        {
+          "path": "frontend/src/components/animations/XPGainAnimation.tsx",
+          "operation": "create",
+          "description": "Create an XP gain animation component that displays a floating '+XP' text with a particle burst effect. Use CSS animations and/or a lightweight animation library (e.g., Framer Motion). Trigger this animation when the user completes a lesson or quest. Position it above the XP bar with upward floating motion and fade-out."
+        },
+        {
+          "path": "frontend/src/components/animations/LevelUpAnimation.tsx",
+          "operation": "create",
+          "description": "Create a full-screen level-up celebration animation component with confetti particles, a large 'LEVEL UP!' text, and character animation. Display the new level number and any rewards earned. Use a modal overlay that auto-dismisses after 3 seconds or on user tap. Trigger this when the user's level increases."
+        },
+        {
+          "path": "frontend/src/components/animations/CoinGemAnimation.tsx",
+          "operation": "create",
+          "description": "Create a coin/gem pickup animation component that animates coins and gems with a bounce and sparkle effect. Display the amount gained with icon-coin.dim_64x64.png or icon-gem.dim_64x64.png. Trigger this animation when the user completes quests, purchases items, or claims streak rewards."
+        },
+        {
+          "path": "frontend/src/components/animations/BossEntranceAnimation.tsx",
+          "operation": "create",
+          "description": "Create a boss battle entrance animation component using the boss-banner.dim_800x300.png image. Display a dramatic entrance with screen shake, darkening, and the boss banner sliding in from the top. Play a brief animation before transitioning to the boss battle lesson. Trigger this when the user starts a boss battle lesson."
+        },
+        {
+          "path": "frontend/src/components/ui/RPGButton.tsx",
+          "operation": "create",
+          "description": "Create a reusable RPG-styled button component with 3D-pressed affordances, gold borders, and hover/press state animations. Use box-shadow and transform to create the 3D effect. Support primary, secondary, and danger variants with appropriate jewel-tone colors. Use this button component throughout the application for all interactive actions."
+        },
+        {
+          "path": "frontend/src/pages/WorldMapPage.tsx",
+          "operation": "modify",
+          "description": "Apply parallax-style layered illustration zones to the World Map background using the world-map-bg.dim_1200x800.png image. Implement parallax scrolling effect if the map is scrollable. Style world nodes with glowing accents when unlocked and greyed-out with lock icons when locked. Use RPGButton for world selection."
+        },
+        {
+          "path": "frontend/src/pages/LessonPage.tsx",
+          "operation": "modify",
+          "description": "Integrate XPGainAnimation and CoinGemAnimation components to trigger on correct answers. Integrate BossEntranceAnimation when starting a boss battle lesson. Add screen shake effect on wrong answers. Style question cards with jewel-tone borders and 3D button effects for answer choices."
+        },
+        {
+          "path": "frontend/src/pages/ProfilePage.tsx",
+          "operation": "modify",
+          "description": "Add animated XP progress bar using a CSS gradient and transition effect. Integrate LevelUpAnimation to trigger when the user levels up. Style the profile screen with jewel-tone accent colors and glowing effects around the avatar."
+        }
+      ]
+    },
+    {
+      "id": "REQ-11",
+      "summary": "Generate and integrate custom visual assets: world map background and 4 character avatars",
+      "acceptanceCriteria": [
+        "World map background asset is rendered as the background of the World Map screen",
+        "4 avatar options are displayed on the Onboarding character selection screen",
+        "Assets are served from frontend/public/assets/generated",
+        "Images load without errors and display at the correct dimensions"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/WorldMapPage.tsx",
+          "operation": "modify",
+          "description": "Set the background image of the World Map screen to frontend/public/assets/generated/world-map-bg.dim_1200x800.png. Use CSS background-image or an img element with absolute positioning to ensure it fills the screen. Ensure the image loads without errors and displays at the correct dimensions (1200x800)."
+        },
+        {
+          "path": "frontend/src/pages/OnboardingPage.tsx",
+          "operation": "modify",
+          "description": "Display the 4 avatar options (wizard, knight, scientist, archer) on the character selection screen using the images frontend/public/assets/generated/avatar-wizard.dim_256x256.png, avatar-knight.dim_256x256.png, avatar-scientist.dim_256x256.png, and avatar-archer.dim_256x256.png. Render them in a grid or carousel with selectable cards. Store the selected avatarId when the user completes onboarding. Ensure all images load without errors at 256x256 dimensions."
+        },
+        {
+          "path": "frontend/src/pages/ProfilePage.tsx",
+          "operation": "modify",
+          "description": "Display the user's selected avatar image from frontend/public/assets/generated/avatar-{avatarId}.dim_256x256.png based on the avatarId stored in their user profile. Ensure the avatar loads without errors and displays at the correct size. Use the same avatar images in the avatar customization panel."
+        },
+        {
+          "path": "frontend/src/components/CoinGemHeader.tsx",
+          "operation": "modify",
+          "description": "Display coin and gem icons from frontend/public/assets/generated/icon-coin.dim_64x64.png and icon-gem.dim_64x64.png next to the numeric balances in the header. Ensure both icons load without errors at 64x64 dimensions."
+        },
+        {
+          "path": "frontend/src/pages/StreakTrackerPage.tsx",
+          "operation": "modify",
+          "description": "Display the streak fire icon from frontend/public/assets/generated/icon-streak.dim_64x64.png next to the day count. Ensure the icon loads without errors at 64x64 dimensions. Apply a glowing animation effect to the fire icon."
+        },
+        {
+          "path": "frontend/src/pages/LessonPage.tsx",
+          "operation": "modify",
+          "description": "Display the boss battle banner from frontend/public/assets/generated/boss-banner.dim_800x300.png when the user enters a boss battle lesson. Use it in the BossEntranceAnimation component. Ensure the banner loads without errors at 800x300 dimensions."
+        },
+        {
+          "path": "frontend/src/pages/ShopPage.tsx",
+          "operation": "modify",
+          "description": "Display coin and gem icons from frontend/public/assets/generated/icon-coin.dim_64x64.png and icon-gem.dim_64x64.png next to item prices in the shop. Ensure both icons load without errors at 64x64 dimensions."
+        }
+      ]
+    }
+  ]
+}

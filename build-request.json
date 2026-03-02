@@ -1,0 +1,282 @@
+{
+  "kind": "build_request",
+  "title": "Gamified Math & English Learning Platform (RPG-style)",
+  "projectName": "EduQuest Academy",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "text": "Implement the core backend data model and actor with the following entities: User (id, username, age, avatarId, xp, level, coins, gems, currentWorldId, streakDays, lastLoginDate, subjectProgress), World (id, name, requiredLevel, isUnlocked, bossDefeated), Lesson (id, worldId, subject (Math|English), title, difficulty, xpReward, coinReward), Quest (id, title, description, xpReward, coinReward, isDaily, expiresAt), UserQuest (userId, questId, completedAt), StreakRecord (userId, currentStreak, longestStreak, lastStreakDate), MultiplayerSession (id, hostId, opponentId, subject, status, winnerId), SkillNode (id, subject, name, prerequisiteIds, requiredLevel), UserSkillNode (userId, skillNodeId, unlocked). Expose CRUD and query functions for all entities.",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "users complete lessons to gain XP, unlock new worlds, and defeat bosses",
+          "Skill tree system",
+          "Daily quests",
+          "Streak rewards",
+          "Multiplayer competitions",
+          "game economy (coins, gems, unlocks)"
+        ]
+      },
+      "acceptanceCriteria": [
+        "All data types are defined and stable in the Motoko actor",
+        "Functions exist to create, read, update, and delete users, lessons, quests, worlds, and skill nodes",
+        "XP and level-up logic is handled server-side (every 1000 XP = level up)",
+        "Coins and gems balances are tracked and can be incremented/decremented",
+        "Streak calculation correctly increments when user logs in on consecutive days",
+        "Multiplayer session can be created, joined, and resolved with a winner"
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "text": "Seed the backend with a complete curriculum structure for Math and English across 6 difficulty tiers: Beginner (Ages 6–8), Elementary (Ages 8–10), Intermediate (Ages 10–12), Advanced (Ages 12–14), Expert (Ages 14–16), and Mastery (Ages 16–18+). Math topics per tier: counting/arithmetic → fractions/decimals → algebra basics → geometry/statistics → advanced algebra/trigonometry → calculus/proofs. English topics per tier: alphabet/phonics → reading comprehension → grammar/writing → literature analysis → essay writing → rhetoric/advanced composition. Each tier maps to a distinct World with at least 5 lessons and one boss battle lesson.",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Curriculum structure for Math and English",
+          "beginner to mastery level",
+          "suitable for ages 6 to 18+",
+          "unlock new worlds, and defeat bosses"
+        ]
+      },
+      "acceptanceCriteria": [
+        "6 worlds exist for Math and 6 for English (12 total), each with a unique name and required level",
+        "Each world contains at least 5 regular lessons and 1 boss lesson",
+        "Boss lessons are flagged with isBoss: true and award 3x the base XP",
+        "Lesson content includes a question type (multiple choice, fill-in-the-blank, drag-and-drop) and at least 3 sample questions",
+        "Topics align with the age-appropriate difficulty tiers described"
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "text": "Implement a Skill Tree system in the backend. Each subject (Math, English) has a directed acyclic graph of SkillNodes. Each node has a name, description, requiredLevel, and prerequisiteIds. Users can unlock a SkillNode by meeting the level requirement and having all prerequisites unlocked. Expose functions: getSkillTree(subject), unlockSkillNode(userId, nodeId), getUserSkillNodes(userId).",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Skill tree system"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Skill tree for Math has at least 15 nodes covering arithmetic through calculus",
+        "Skill tree for English has at least 15 nodes covering phonics through advanced composition",
+        "unlockSkillNode enforces level and prerequisite requirements",
+        "getUserSkillNodes returns which nodes are locked, unlocked, or available to unlock"
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "text": "Implement a Daily Quests system. Each day, 3 quests are generated for each user (e.g., 'Complete 3 Math lessons', 'Defeat a boss', 'Win a multiplayer match', 'Maintain a 5-day streak'). Quests expire at midnight UTC. Completing a quest awards XP and coins. Expose functions: getDailyQuests(userId), completeQuest(userId, questId).",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Daily quests"
+        ]
+      },
+      "acceptanceCriteria": [
+        "3 daily quests are available per user per day",
+        "Quests refresh at midnight UTC (tracked by expiresAt timestamp)",
+        "Completing a quest credits XP and coins to the user",
+        "A quest cannot be completed twice in the same day",
+        "Quest types include lesson completion, boss defeat, streak maintenance, and multiplayer win"
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "text": "Implement a Streak Rewards system. Track consecutive daily logins per user. Award escalating rewards: Day 3 = 50 coins, Day 7 = 100 coins + 5 gems, Day 14 = 200 coins + 10 gems + avatar frame unlock, Day 30 = 500 coins + 25 gems + exclusive world skin. Expose functions: recordLogin(userId), getStreakStatus(userId), claimStreakReward(userId).",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Streak rewards"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Streak increments when user logs in on consecutive calendar days",
+        "Streak resets to 0 if a day is missed",
+        "Milestone rewards are issued at days 3, 7, 14, and 30",
+        "Rewards are credited to user's coin and gem balance",
+        "claimStreakReward can only be called once per milestone"
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "text": "Implement Multiplayer Competitions. Two users can challenge each other to a timed subject quiz (10 questions, 90 seconds). The player with the most correct answers wins. Winner receives 150 XP and 50 coins; loser receives 30 XP. Expose functions: createChallenge(hostId, subject), joinChallenge(sessionId, opponentId), submitAnswers(sessionId, userId, answers[]), resolveSession(sessionId).",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Multiplayer competitions"
+        ]
+      },
+      "acceptanceCriteria": [
+        "A multiplayer session can be created and joined by two different users",
+        "Session includes 10 randomly selected questions from the chosen subject",
+        "resolveSession correctly determines the winner based on correct answer count",
+        "XP and coins are awarded to both players after resolution",
+        "Session status transitions: pending → active → completed"
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "text": "Implement a Personalized AI Tutor using rule-based adaptive logic (no external AI API). The tutor tracks user error patterns per topic and adjusts lesson difficulty. If a user scores below 60% on a lesson, it recommends a remedial lesson and displays an encouraging hint. If a user scores above 90%, it recommends the next advanced lesson. Expose functions: getTutorRecommendation(userId, subject), recordLessonResult(userId, lessonId, score).",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Personalized AI tutor",
+          "adapts to learner level"
+        ]
+      },
+      "acceptanceCriteria": [
+        "recordLessonResult stores score and updates topic mastery percentage",
+        "getTutorRecommendation returns next lesson ID and a motivational message",
+        "Score < 60% triggers remedial lesson recommendation",
+        "Score > 90% triggers advancement recommendation",
+        "Tutor message is age-appropriate and encouraging"
+      ]
+    },
+    {
+      "id": "REQ-8",
+      "text": "Build the full frontend application with the following screens: (1) Splash/Onboarding screen with character selection and age-group selection, (2) World Map screen showing all 12 worlds as nodes on an adventure map with locked/unlocked/boss states, (3) Lesson screen with interactive question types (multiple choice, fill-in-the-blank), (4) Skill Tree screen with a visual node graph per subject, (5) Daily Quests panel, (6) Streak tracker with reward milestones, (7) Multiplayer lobby and battle screen, (8) AI Tutor chat/recommendation panel, (9) Profile screen showing XP bar, level, coins, gems, avatar, achievements, (10) Leaderboard screen. Use React Query to connect all screens to the backend actor.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "World map progression",
+          "Skill tree system",
+          "Daily quests",
+          "Streak rewards",
+          "Multiplayer competitions",
+          "Personalized AI tutor",
+          "Curriculum structure",
+          "UI/UX style inspired by modern educational games"
+        ]
+      },
+      "acceptanceCriteria": [
+        "All 10 screens are navigable from a persistent bottom navigation bar",
+        "World Map renders each world as a visual node; locked worlds are greyed out",
+        "Lesson screen presents questions one at a time with immediate feedback (correct = green flash + XP pop-up, wrong = red shake + hint)",
+        "Skill Tree renders nodes as a connected graph with prerequisite lines",
+        "Daily Quests panel shows progress bars for each active quest",
+        "Streak tracker shows a fire icon with day count and milestone markers",
+        "Multiplayer lobby shows available challenges and a 'Create Challenge' button",
+        "Profile screen shows animated XP progress bar and coin/gem balances",
+        "Leaderboard shows top 10 users by XP with rank badges"
+      ]
+    },
+    {
+      "id": "REQ-9",
+      "text": "Implement the Game Economy UI. Display the user's coin and gem balances persistently in the top header bar across all screens. Add a Shop screen where users can spend coins to unlock hint packs (50 coins each) and spend gems to unlock premium avatar costumes (20 gems each) or world skin themes (30 gems each). Persist all purchases to the backend and deduct balances accordingly.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Game economy (coins, gems, unlocks)"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Coin and gem balances are shown in a persistent header on every screen",
+        "Shop screen lists available items with their costs",
+        "Purchasing an item deducts the correct balance and marks the item as owned",
+        "Insufficient balance shows a clear error message",
+        "Purchased avatar costumes appear in the Profile screen's avatar customization panel"
+      ]
+    },
+    {
+      "id": "REQ-10",
+      "text": "Apply a vibrant RPG adventure visual theme across the entire app. Use a rich jewel-toned color palette (deep emerald green, royal gold, crimson red, midnight navy) with glowing accents. Typography should use a bold, rounded adventure-style font for headings and a clean sans-serif for body text. World Map backgrounds should have layered parallax-style illustration zones (forest, volcano, ocean, sky castle, etc.). Buttons should have 3D-pressed affordances with gold borders. Animate XP gains, level-ups, coin drops, and quest completions with particle effects and screen flashes. The UI should feel like a console RPG adapted for mobile.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "UI/UX style inspired by modern educational games",
+          "role-playing game",
+          "fun, interactive, and addictive"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Color palette consistently uses the defined jewel tones across all screens",
+        "Headings use a bold rounded font; body text uses a clean sans-serif",
+        "XP gain triggers an animated floating '+XP' text and particle burst",
+        "Level-up triggers a full-screen celebration animation",
+        "Coin and gem pickups animate with a bounce and sparkle effect",
+        "Boss battle lesson has a distinct dramatic entrance animation",
+        "All interactive buttons have hover/press state with a 3D-press effect"
+      ]
+    },
+    {
+      "id": "REQ-11",
+      "text": "Generate and integrate custom visual assets: a world map background illustration showing 6 themed zones (enchanted forest, volcanic mountain, deep ocean, sky kingdom, frozen tundra, cosmic void) connected by a winding path, and character avatar illustrations for 4 selectable starter heroes (young wizard, brave knight, curious scientist, nature archer).",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "World map progression",
+          "role-playing game"
+        ]
+      },
+      "acceptanceCriteria": [
+        "World map background asset is rendered as the background of the World Map screen",
+        "4 avatar options are displayed on the Onboarding character selection screen",
+        "Assets are served from frontend/public/assets/generated",
+        "Images load without errors and display at the correct dimensions"
+      ]
+    }
+  ],
+  "constraints": [
+    "All backend logic must remain in a single Motoko actor (backend/main.mo)",
+    "No external AI API integrations — AI tutor must use rule-based adaptive logic only",
+    "No real-time WebSocket features — multiplayer uses turn-based/async submission model",
+    "Immutable frontend paths (hooks, ui components, main.tsx) must not be modified",
+    "No external databases — all state persisted in Motoko stable variables"
+  ],
+  "nonGoals": [
+    "Real-time live multiplayer with WebSockets",
+    "Integration with external AI services (OpenAI, etc.)",
+    "Payment processing or in-app purchases with real currency",
+    "Native mobile app build (iOS/Android) — web-only responsive design",
+    "User authentication beyond Internet Identity",
+    "Social media sharing integrations",
+    "Video or audio lesson content"
+  ],
+  "imageRequirements": {
+    "required": [
+      "Illustrated RPG world map background showing 6 distinct themed zones connected by a winding adventure path: enchanted forest (green), volcanic mountain (red/orange), deep ocean (teal), sky kingdom (light blue/gold), frozen tundra (white/ice blue), and cosmic void (dark purple/stars) (world-map-bg.dim_1200x800.png)",
+      "Cartoon RPG hero avatar — young wizard in blue robes holding a glowing staff, friendly and cute style suitable for ages 6+ (avatar-wizard.dim_256x256.png)",
+      "Cartoon RPG hero avatar — brave knight in gold armor with a small shield, friendly and cute style suitable for ages 6+ (avatar-knight.dim_256x256.png)",
+      "Cartoon RPG hero avatar — curious scientist in a white lab coat with goggles and a notebook, friendly and cute style (avatar-scientist.dim_256x256.png)",
+      "Cartoon RPG hero avatar — nature archer in green forest attire with a bow and leaf motifs, friendly and cute style (avatar-archer.dim_256x256.png)",
+      "Gold coin icon with shine effect, isolated on transparent background (icon-coin.dim_64x64.png)",
+      "Sparkling blue gem/crystal icon, isolated on transparent background (icon-gem.dim_64x64.png)",
+      "Flame streak icon in orange and gold gradient for streak counter, isolated on transparent background (icon-streak.dim_64x64.png)",
+      "Boss battle banner illustration — a large shadowy monster silhouette with glowing red eyes on a dramatic dark stormy background (boss-banner.dim_800x300.png)"
+    ],
+    "edits": []
+  }
+}

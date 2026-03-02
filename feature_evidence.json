@@ -1,0 +1,114 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-build-the-full-frontend-application-with-the-following-screens-1-splash-onboarding-screen-with-character-selection-and-age-group-selection-2-world-map-screen-showing-all-12-worlds-as-nodes-on-an-adventure-map-with-locked-unlocked-boss-states-3-lesson-screen-with-interactive-question-types-multiple-choice-fill-in-the-blank-4-skill-tree-screen-with-a-visual-node-graph-per-subject-5-daily-quests-panel-6-streak-tracker-with-reward-milestones-7-multiplayer-lobby-and-battle-screen-8-ai-tutor-chat-recommendation-panel-9-profile-screen-showing-xp-bar-level-coins-gems-avatar-achievements-10-leaderboard-screen-use-react-query-to-connect-all-screens-to-the-backend-actor",
+      "featureTitle": "Build the full frontend application with the following screens: (1) Splash/Onboarding screen with character selection and age-group selection, (2) World Map screen showing all 12 worlds as nodes on an adventure map with locked/unlocked/boss states, (3) Lesson screen with interactive question types (multiple choice, fill-in-the-blank), (4) Skill Tree screen with a visual node graph per subject, (5) Daily Quests panel, (6) Streak tracker with reward milestones, (7) Multiplayer lobby and battle screen, (8) AI Tutor chat/recommendation panel, (9) Profile screen showing XP bar, level, coins, gems, avatar, achievements, (10) Leaderboard screen. Use React Query to connect all screens to the backend actor.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/BottomNavigation.tsx",
+        "frontend/src/components/Layout.tsx",
+        "frontend/src/pages/AITutorPage.tsx",
+        "frontend/src/pages/DailyQuestsPage.tsx",
+        "frontend/src/pages/LeaderboardPage.tsx",
+        "frontend/src/pages/LessonPage.tsx",
+        "frontend/src/pages/MultiplayerPage.tsx",
+        "frontend/src/pages/OnboardingPage.tsx",
+        "frontend/src/pages/ProfilePage.tsx",
+        "frontend/src/pages/SkillTreePage.tsx",
+        "frontend/src/pages/StreakTrackerPage.tsx",
+        "frontend/src/pages/WorldMapPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-8"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-the-game-economy-ui-display-the-user-s-coin-and-gem-balances-persistently-in-the-top-header-bar-across-all-screens-add-a-shop-screen-where-users-can-spend-coins-to-unlock-hint-packs-50-coins-each-and-spend-gems-to-unlock-premium-avatar-costumes-20-gems-each-or-world-skin-themes-30-gems-each-persist-all-purchases-to-the-backend-and-deduct-balances-accordingly",
+      "featureTitle": "Implement the Game Economy UI. Display the user's coin and gem balances persistently in the top header bar across all screens. Add a Shop screen where users can spend coins to unlock hint packs (50 coins each) and spend gems to unlock premium avatar costumes (20 gems each) or world skin themes (30 gems each). Persist all purchases to the backend and deduct balances accordingly.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/BottomNavigation.tsx",
+        "frontend/src/components/CoinGemHeader.tsx",
+        "frontend/src/pages/ShopPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-9"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-apply-a-vibrant-rpg-adventure-visual-theme-across-the-entire-app-use-a-rich-jewel-toned-color-palette-deep-emerald-green-royal-gold-crimson-red-midnight-navy-with-glowing-accents-typography-should-use-a-bold-rounded-adventure-style-font-for-headings-and-a-clean-sans-serif-for-body-text-world-map-backgrounds-should-have-layered-parallax-style-illustration-zones-forest-volcano-ocean-sky-castle-etc-buttons-should-have-3d-pressed-affordances-with-gold-borders-animate-xp-gains-level-ups-coin-drops-and-quest-completions-with-particle-effects-and-screen-flashes-the-ui-should-feel-like-a-console-rpg-adapted-for-mobile",
+      "featureTitle": "Apply a vibrant RPG adventure visual theme across the entire app. Use a rich jewel-toned color palette (deep emerald green, royal gold, crimson red, midnight navy) with glowing accents. Typography should use a bold, rounded adventure-style font for headings and a clean sans-serif for body text. World Map backgrounds should have layered parallax-style illustration zones (forest, volcano, ocean, sky castle, etc.). Buttons should have 3D-pressed affordances with gold borders. Animate XP gains, level-ups, coin drops, and quest completions with particle effects and screen flashes. The UI should feel like a console RPG adapted for mobile.",
+      "files": [
+        "frontend/src/components/animations/BossEntranceAnimation.tsx",
+        "frontend/src/components/animations/CoinGemAnimation.tsx",
+        "frontend/src/components/animations/LevelUpAnimation.tsx",
+        "frontend/src/components/animations/XPGainAnimation.tsx",
+        "frontend/src/index.css",
+        "frontend/src/pages/LessonPage.tsx",
+        "frontend/src/pages/ProfilePage.tsx",
+        "frontend/src/pages/WorldMapPage.tsx",
+        "frontend/tailwind.config.js"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-10"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-generate-and-integrate-custom-visual-assets-a-world-map-background-illustration-showing-6-themed-zones-enchanted-forest-volcanic-mountain-deep-ocean-sky-kingdom-frozen-tundra-cosmic-void-connected-by-a-winding-path-and-character-avatar-illustrations-for-4-selectable-starter-heroes-young-wizard-brave-knight-curious-scientist-nature-archer",
+      "featureTitle": "Generate and integrate custom visual assets: a world map background illustration showing 6 themed zones (enchanted forest, volcanic mountain, deep ocean, sky kingdom, frozen tundra, cosmic void) connected by a winding path, and character avatar illustrations for 4 selectable starter heroes (young wizard, brave knight, curious scientist, nature archer).",
+      "files": [
+        "frontend/src/components/CoinGemHeader.tsx",
+        "frontend/src/pages/LessonPage.tsx",
+        "frontend/src/pages/OnboardingPage.tsx",
+        "frontend/src/pages/ProfilePage.tsx",
+        "frontend/src/pages/ShopPage.tsx",
+        "frontend/src/pages/StreakTrackerPage.tsx",
+        "frontend/src/pages/WorldMapPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-11"
+      ],
+      "confidence": "high"
+    }
+  ]
+}

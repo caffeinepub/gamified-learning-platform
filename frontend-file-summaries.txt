@@ -1,0 +1,15 @@
+{
+  "frontend/src/App.tsx": "Main application entry point that handles authentication state, profile loading, and renders either the login page, onboarding, or the full TanStack Router with all 12 routes wrapped in the Layout component.",
+  "frontend/src/pages/LoginPage.tsx": "Login screen with EduQuest branding, feature highlights, and Internet Identity login button, plus the caffeine.ai footer attribution.",
+  "frontend/src/pages/SkillTreePage.tsx": "Skill tree page with Math/English tabs showing unlocked, available, and locked skill nodes with unlock functionality and progress summary.",
+  "frontend/src/pages/DailyQuestsPage.tsx": "Daily quests page displaying active quests with progress bars, expiration timers, XP/coin rewards, and quest completion with animations.",
+  "frontend/src/pages/StreakTrackerPage.tsx": "Streak tracker page showing current streak with fire icon, milestone reward markers with progress bars, and a claim reward button.",
+  "frontend/src/pages/MultiplayerPage.tsx": "Multiplayer battle page with lobby (create/join challenge), waiting room with session ID sharing, timed quiz battle, and results screen.",
+  "frontend/src/pages/AITutorPage.tsx": "AI tutor page with rule-based chat interface, subject-specific recommendations, quick prompt buttons, and personalized lesson suggestions.",
+  "frontend/src/pages/ProfilePage.tsx": "Profile page showing avatar, XP progress bar, coin/gem/streak stats, subject progress, achievements grid, purchased costumes, and logout button.",
+  "frontend/src/pages/LeaderboardPage.tsx": "Leaderboard page showing top 10 players by XP with rank badges, avatars, levels, and current user highlighted with their rank.",
+  "frontend/src/pages/ShopPage.tsx": "Shop page with tabbed sections for hint packs (coins), avatar costumes (gems), and world skins (gems), with balance checks and purchase animations.",
+  "frontend/src/components/Layout.tsx": "Layout wrapper component with sticky header showing EduQuest branding and coin/gem balances, plus bottom navigation, hidden on login/onboarding screens.",
+  "frontend/src/components/BottomNavigation.tsx": "Persistent bottom navigation bar with 9 nav items (Map, Skills, Quests, Streak, Battle, Tutor, Shop, Profile, Ranks) with active state gold highlighting.",
+  "frontend/src/lib/utils.ts": "Utility file exporting the `cn` helper function that merges Tailwind class names using clsx and tailwind-merge."
+}
