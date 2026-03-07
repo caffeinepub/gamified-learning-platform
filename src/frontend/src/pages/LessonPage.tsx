@@ -8,6 +8,7 @@ import LevelUpAnimation from "../components/animations/LevelUpAnimation";
 import XPGainAnimation from "../components/animations/XPGainAnimation";
 import { Skeleton } from "../components/ui/skeleton";
 import {
+  WORLD_NAME_TO_ID,
   useGetUser,
   useGetWorldLessons,
   useRecordLessonResult,
@@ -16,11 +17,21 @@ import {
 import { WORLD_THEMES, getLevelFromXP } from "../lib/gameData";
 import { loadUserId, recordLessonCompletion } from "../lib/userStore";
 
+export interface LessonSessionStats {
+  worldId: string;
+  worldName: string;
+  totalXPEarned: number;
+  coinsEarned: number;
+  score: number;
+  totalQuestions: number;
+}
+
 interface LessonPageProps {
   worldId: string;
   userId: string;
+  startIndex?: number;
   onBack: () => void;
-  onComplete: () => void;
+  onComplete: (stats: LessonSessionStats) => void;
 }
 
 // Map worldId to world name for progress recording
@@ -35,16 +46,19 @@ const WORLD_ID_TO_NAME: Record<string, string> = {
 export default function LessonPage({
   worldId,
   userId: propUserId,
+  startIndex,
   onBack,
   onComplete,
 }: LessonPageProps) {
   const userId = propUserId || loadUserId() || "";
-  const { data: lessons, isLoading } = useGetWorldLessons(worldId);
+  // Resolve worldId: support both "world1" style IDs and world names like "Alphabet Forest"
+  const resolvedWorldId = WORLD_NAME_TO_ID[worldId] || worldId;
+  const { data: lessons, isLoading } = useGetWorldLessons(resolvedWorldId);
   const { data: user } = useGetUser(userId);
   const recordResult = useRecordLessonResult();
   const recordProgress = useRecordProgress();
 
-  const [currentLessonIndex, setCurrentLessonIndex] = useState(0);
+  const [currentLessonIndex, setCurrentLessonIndex] = useState(startIndex ?? 0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [isAnswered, setIsAnswered] = useState(false);
   const [showXP, setShowXP] = useState(false);
@@ -56,6 +70,8 @@ export default function LessonPage({
   const [newLevel, setNewLevel] = useState(1);
   const [score, setScore] = useState(0);
   const [totalAnswered, setTotalAnswered] = useState(0);
+  const [totalXPEarned, setTotalXPEarned] = useState(0);
+  const [totalCoinsEarned, setTotalCoinsEarned] = useState(0);
 
   const currentLesson: Lesson | undefined = lessons?.[currentLessonIndex];
 
@@ -79,7 +95,7 @@ export default function LessonPage({
       try {
         const xp = Number(currentLesson.xpReward);
         const coins = Number(currentLesson.coinReward);
-        const worldName = WORLD_ID_TO_NAME[worldId] || worldId;
+        const worldName = WORLD_ID_TO_NAME[resolvedWorldId] || resolvedWorldId;
 
         await Promise.all([
           recordResult.mutateAsync({
@@ -95,10 +111,12 @@ export default function LessonPage({
             xpEarned: currentLesson.xpReward,
           }),
         ]);
-        recordLessonCompletion(worldId);
+        recordLessonCompletion(resolvedWorldId);
 
         setXpGained(xp);
         setCoinsGained(coins);
+        setTotalXPEarned((prev) => prev + xp);
+        setTotalCoinsEarned((prev) => prev + coins);
 
         // Check for level up
         if (user) {
@@ -121,7 +139,7 @@ export default function LessonPage({
     } else if (!isCorrect && userId) {
       // Record wrong attempt with score 0
       try {
-        const worldName = WORLD_ID_TO_NAME[worldId] || worldId;
+        const worldName = WORLD_ID_TO_NAME[resolvedWorldId] || resolvedWorldId;
         await recordProgress.mutateAsync({
           userId,
           lessonName: currentLesson.title,
@@ -142,7 +160,14 @@ export default function LessonPage({
       setSelectedAnswer(null);
       setIsAnswered(false);
     } else {
-      onComplete();
+      onComplete({
+        worldId: resolvedWorldId,
+        worldName: WORLD_ID_TO_NAME[resolvedWorldId] || resolvedWorldId,
+        totalXPEarned,
+        coinsEarned: totalCoinsEarned,
+        score,
+        totalQuestions: lessons.length,
+      });
     }
   };
 

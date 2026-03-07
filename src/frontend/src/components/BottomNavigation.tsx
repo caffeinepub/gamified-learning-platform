@@ -17,7 +17,9 @@ type AppPage =
   | "login"
   | "onboarding"
   | "worldmap"
+  | "worlddetail"
   | "lesson"
+  | "results"
   | "skilltree"
   | "dailyquests"
   | "streak"
@@ -58,7 +60,8 @@ export default function BottomNavigation({
         {NAV_ITEMS.map(({ page, icon, label }) => {
           const isActive =
             currentPage === page ||
-            (currentPage === "lesson" && page === "worldmap");
+            (currentPage === "lesson" && page === "worldmap") ||
+            (currentPage === "worlddetail" && page === "worldmap");
           return (
             <button
               type="button"

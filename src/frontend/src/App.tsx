@@ -9,6 +9,8 @@ import AITutorPage from "./pages/AITutorPage";
 import DailyQuestsPage from "./pages/DailyQuestsPage";
 import LeaderboardPage from "./pages/LeaderboardPage";
 import LessonPage from "./pages/LessonPage";
+import type { LessonSessionStats } from "./pages/LessonPage";
+import LessonResultsPage from "./pages/LessonResultsPage";
 import LoginPage from "./pages/LoginPage";
 import MultiplayerPage from "./pages/MultiplayerPage";
 import OnboardingPage from "./pages/OnboardingPage";
@@ -18,6 +20,7 @@ import RewardsPage from "./pages/RewardsPage";
 import ShopPage from "./pages/ShopPage";
 import SkillTreePage from "./pages/SkillTreePage";
 import StreakTrackerPage from "./pages/StreakTrackerPage";
+import WorldDetailPage from "./pages/WorldDetailPage";
 import WorldMapPage from "./pages/WorldMapPage";
 
 const queryClient = new QueryClient({
@@ -33,7 +36,9 @@ export type AppPage =
   | "login"
   | "onboarding"
   | "worldmap"
+  | "worlddetail"
   | "lesson"
+  | "results"
   | "skilltree"
   | "dailyquests"
   | "streak"
@@ -50,7 +55,11 @@ function AppContent() {
   const isAuthenticated = !!identity;
   const [currentPage, setCurrentPage] = useState<AppPage>("login");
   const [lessonWorldId, setLessonWorldId] = useState<string>("world1");
+  const [selectedLessonIndex, setSelectedLessonIndex] = useState(0);
   const [userId, setUserId] = useState<string>(() => loadUserId() || "");
+  const [lessonStats, setLessonStats] = useState<LessonSessionStats | null>(
+    null,
+  );
 
   const {
     data: userProfile,
@@ -138,7 +147,19 @@ function AppContent() {
         return (
           <WorldMapPage
             userId={userId}
-            onEnterWorld={(worldId) => navigate("lesson", { worldId })}
+            onEnterWorld={(worldId) => navigate("worlddetail", { worldId })}
+          />
+        );
+      case "worlddetail":
+        return (
+          <WorldDetailPage
+            worldId={lessonWorldId}
+            userId={userId}
+            onBack={() => navigate("worldmap")}
+            onSelectLesson={(worldId, lessonIndex) => {
+              setSelectedLessonIndex(lessonIndex);
+              navigate("lesson", { worldId });
+            }}
           />
         );
       case "lesson":
@@ -146,8 +167,29 @@ function AppContent() {
           <LessonPage
             worldId={lessonWorldId}
             userId={userId}
-            onBack={() => navigate("worldmap")}
-            onComplete={() => navigate("worldmap")}
+            startIndex={selectedLessonIndex}
+            onBack={() => navigate("worlddetail")}
+            onComplete={(stats) => {
+              setLessonStats(stats);
+              navigate("results");
+            }}
+          />
+        );
+      case "results":
+        return lessonStats ? (
+          <LessonResultsPage
+            stats={lessonStats}
+            userId={userId}
+            onNextWorld={(worldId) => navigate("worlddetail", { worldId })}
+            onReplay={() =>
+              navigate("worlddetail", { worldId: lessonStats.worldId })
+            }
+            onBackToMap={() => navigate("worldmap")}
+          />
+        ) : (
+          <WorldMapPage
+            userId={userId}
+            onEnterWorld={(worldId) => navigate("worlddetail", { worldId })}
           />
         );
       case "skilltree":
@@ -183,7 +225,7 @@ function AppContent() {
         return (
           <WorldMapPage
             userId={userId}
-            onEnterWorld={(worldId) => navigate("lesson", { worldId })}
+            onEnterWorld={(worldId) => navigate("worlddetail", { worldId })}
           />
         );
     }

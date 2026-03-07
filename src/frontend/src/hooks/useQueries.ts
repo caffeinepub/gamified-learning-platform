@@ -134,14 +134,43 @@ export function useGetAvailableWorlds(userId: string) {
 
 // ─── Lessons ──────────────────────────────────────────────────────────────────
 
+// World name → worldId mapping for resolving lessons stored by name or by id
+const WORLD_NAME_TO_ID: Record<string, string> = {
+  "Alphabet Forest": "world1",
+  "Grammar City": "world2",
+  "Math Valley": "world3",
+  "Algebra Mountains": "world4",
+  "Master Volcano": "world5",
+};
+
+export { WORLD_NAME_TO_ID };
+
 export function useGetWorldLessons(worldId: string) {
   const { actor, isFetching: actorFetching } = useActor();
+  // Resolve: if worldId looks like a world name, convert to id; always query both
+  const resolvedId = WORLD_NAME_TO_ID[worldId] || worldId;
+  const worldName = Object.entries(WORLD_NAME_TO_ID).find(
+    ([, id]) => id === resolvedId,
+  )?.[0];
 
   return useQuery<Lesson[]>({
-    queryKey: ["worldLessons", worldId],
+    queryKey: ["worldLessons", resolvedId],
     queryFn: async () => {
       if (!actor) throw new Error("Actor not available");
-      return actor.getWorldLessons(worldId);
+      // Fetch by id and by name, merge deduplicated results
+      const [byId, byName] = await Promise.all([
+        actor.getWorldLessons(resolvedId),
+        worldName ? actor.getLessonsByWorld(worldName) : Promise.resolve([]),
+      ]);
+      const seen = new Set<string>();
+      const merged: Lesson[] = [];
+      for (const l of [...byId, ...byName]) {
+        if (!seen.has(l.id)) {
+          seen.add(l.id);
+          merged.push(l);
+        }
+      }
+      return merged;
     },
     enabled: !!actor && !actorFetching && !!worldId,
   });
